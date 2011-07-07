@@ -1,15 +1,8 @@
 from django.db import models
 
-class Stream(models.Model):
-	title=models.CharField(max_length=200)
-
-	def __unicode__(self):
-		return self.title
-
 class Module(models.Model):
-	stream=models.ForeignKey(Stream)
 	title=models.CharField(max_length=200)
-
+	
 	def __unicode__(self):
 		return self.title
 
