@@ -1,0 +1,8 @@
+<h1>{{video}}</h1>
+
+<% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="/videos/{{ video.id }}/done/" method="post">
+{% csrf_token %}
+<input type="submit" name="done" id="done" value="done" />
+</form>
