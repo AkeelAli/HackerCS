@@ -48,3 +48,11 @@ class Video(models.Model):
 
 	def module_title_part(self):
 		return "%s" % self.module_id.module_title + " ("+str(self.video_part)+")"
+
+	def video_youtube_id(self):
+		import re
+		match=re.search("v=(.*)$",self.video_url)
+		if match:
+			return match.group(1)
+		else:
+			return ''
