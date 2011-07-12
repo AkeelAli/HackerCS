@@ -18,7 +18,7 @@ class Stream(models.Model):
 class Module(models.Model):
 	module_associations=models.ManyToManyField(Stream, through='Association')
 	module_title=models.CharField(max_length=200)
-	
+
 	def __unicode__(self):
 		return self.module_title
 
@@ -56,3 +56,22 @@ class Video(models.Model):
 			return match.group(1)
 		else:
 			return ''
+	
+	def video_tags(self):
+		tag_titles=[]
+		for video_tag in self.video_tag_set.all():
+			tag=video_tag.video_tag_tag.tag_title
+			tag_titles.append(tag)
+		return ', '.join(tag_titles)
+
+class Tag(models.Model):
+	tag_title=models.CharField(max_length=200)
+	tag_video_tags=models.ManyToManyField(Video, through='Video_Tag')
+
+	def __unicode__(self):
+		return self.tag_title
+
+class Video_Tag(models.Model):
+	video_tag_video=models.ForeignKey(Video)
+	video_tag_tag=models.ForeignKey(Tag)
+	

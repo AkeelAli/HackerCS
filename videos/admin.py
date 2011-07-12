@@ -1,10 +1,17 @@
-from videos.models import Association, Stream, Module, Video
+from videos.models import Tag, Video_Tag, Association, Stream, Module, Video
 from django.contrib import admin
 
+########
+#inlines
+########
 class VideoInline(admin.TabularInline):
 	model=Video
 	extra=4
 
+
+#######
+#admins
+#######
 class ModuleAdmin(admin.ModelAdmin):
 	inlines=[VideoInline]
 	search_fields=['module_title']
@@ -19,6 +26,8 @@ class StreamAdmin(admin.ModelAdmin):
 class VideoAdmin(admin.ModelAdmin):
 	list_display=('video_url','module_title_part')
 
+admin.site.register(Tag)
+admin.site.register(Video_Tag)
 admin.site.register(Association,AssociationAdmin)
 admin.site.register(Stream,StreamAdmin)
 admin.site.register(Module,ModuleAdmin)
