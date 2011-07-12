@@ -1,5 +1,10 @@
 from django.db import models
 
+class Type(models.Model):
+	type_title=models.CharField(max_length=200)
+
+	def __unicode__(self):
+		return self.type_title
 
 class Stream(models.Model):
 	stream_title=models.CharField(max_length=200)
@@ -18,6 +23,7 @@ class Stream(models.Model):
 class Module(models.Model):
 	module_associations=models.ManyToManyField(Stream, through='Association')
 	module_title=models.CharField(max_length=200)
+	module_description=models.TextField(null=True, blank=True)
 
 	def __unicode__(self):
 		return self.module_title
@@ -39,12 +45,14 @@ class Association(models.Model):
 
 class Video(models.Model):
 	module_id=models.ForeignKey(Module)
+	video_type=models.ForeignKey(Type)
+
 	video_url=models.CharField(max_length=200)
 	video_title=models.CharField(max_length=200, blank=True)
 	video_part=models.IntegerField()
 
 	def __unicode__(self):
-		return self.video_url
+		return "%s" % self.module_id.module_title + " ("+str(self.video_part)+")"
 
 	def module_title_part(self):
 		return "%s" % self.module_id.module_title + " ("+str(self.video_part)+")"
