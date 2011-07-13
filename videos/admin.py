@@ -1,4 +1,4 @@
-from videos.models import Type, Tag, Video_Tag, Association, Stream, Module, Video
+from videos.models import Type, Tag, Association, Stream, Module, Video
 from django.contrib import admin
 
 ########
@@ -21,14 +21,13 @@ class AssociationAdmin(admin.ModelAdmin):
 	list_display=('association_stream_id', 'association_module_id', 'association_part')
 
 class StreamAdmin(admin.ModelAdmin):
-	list_display=('stream_title','module_titles')
+	list_display=('stream_title','stream_description','module_titles')
 
 class VideoAdmin(admin.ModelAdmin):
-	list_display=('video_url','module_title_part')
+	list_display=('module_title_part','video_url','video_type','video_tags')
 
 admin.site.register(Type)
 admin.site.register(Tag)
-admin.site.register(Video_Tag)
 admin.site.register(Association,AssociationAdmin)
 admin.site.register(Stream,StreamAdmin)
 admin.site.register(Module,ModuleAdmin)

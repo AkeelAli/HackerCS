@@ -1,5 +1,11 @@
 from django.db import models
 
+class Tag(models.Model):
+	tag_title=models.CharField(max_length=200)
+
+	def __unicode__(self):
+		return self.tag_title
+
 class Type(models.Model):
 	type_title=models.CharField(max_length=200)
 
@@ -8,10 +14,14 @@ class Type(models.Model):
 
 class Stream(models.Model):
 	stream_title=models.CharField(max_length=200)
-	
+	stream_description=models.TextField(null=True, blank=True)
+
 	def __unicode__(self):
 		return self.stream_title
-
+	
+	def module_count(self):
+		return len(self.association_set.all())
+	
 	def module_titles(self):
 		module_titles=[]
 		for association in self.association_set.all():
@@ -22,6 +32,8 @@ class Stream(models.Model):
 
 class Module(models.Model):
 	module_associations=models.ManyToManyField(Stream, through='Association')
+	module_prereqs=models.ManyToManyField("self", symmetrical=False)
+
 	module_title=models.CharField(max_length=200)
 	module_description=models.TextField(null=True, blank=True)
 
@@ -45,7 +57,8 @@ class Association(models.Model):
 
 class Video(models.Model):
 	module_id=models.ForeignKey(Module)
-	video_type=models.ForeignKey(Type)
+	video_type=models.ForeignKey(Type, null=True, blank=True)
+	video_tag=models.ManyToManyField(Tag, blank=True, null=True)
 
 	video_url=models.CharField(max_length=200)
 	video_title=models.CharField(max_length=200, blank=True)
@@ -64,22 +77,10 @@ class Video(models.Model):
 			return match.group(1)
 		else:
 			return ''
-	
+
 	def video_tags(self):
-		tag_titles=[]
-		for video_tag in self.video_tag_set.all():
-			tag=video_tag.video_tag_tag.tag_title
-			tag_titles.append(tag)
-		return ', '.join(tag_titles)
+		tags=[]
+		for tag in self.video_tag.all():
+			tags.append(tag.tag_title)
+		return ', '.join(tags)
 
-class Tag(models.Model):
-	tag_title=models.CharField(max_length=200)
-	tag_video_tags=models.ManyToManyField(Video, through='Video_Tag')
-
-	def __unicode__(self):
-		return self.tag_title
-
-class Video_Tag(models.Model):
-	video_tag_video=models.ForeignKey(Video)
-	video_tag_tag=models.ForeignKey(Tag)
-	

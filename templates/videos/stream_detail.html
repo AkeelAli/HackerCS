@@ -5,9 +5,10 @@
 		{% with module=association.association_module_id  %}
 			<p>
 			<li>{{ module }}</li>
+			Description: {{module.module_description}}
 			<ol>
 				{% for video in module.video_set.all %}
-					<li><a href="../../{{video.pk}}">{{video.module_title_part}}</a></li>
+					<li><a href="../../{{video.pk}}">Part {{video.video_part}}</a> [{{video.video_type}}, Length= ]</li>
 				{%endfor%}
 			</ol>
 			</p>
